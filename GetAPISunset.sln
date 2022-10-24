@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetAPISunset", "GetAPISunset\GetAPISunset.csproj", "{C512F74A-C57F-46F3-A2D0-861882AF3B0B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C512F74A-C57F-46F3-A2D0-861882AF3B0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C512F74A-C57F-46F3-A2D0-861882AF3B0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C512F74A-C57F-46F3-A2D0-861882AF3B0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C512F74A-C57F-46F3-A2D0-861882AF3B0B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {49546A30-EBD9-42BD-8AA8-FC783F8C5353}
+	EndGlobalSection
+EndGlobal
