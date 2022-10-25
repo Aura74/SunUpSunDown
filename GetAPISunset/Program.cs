@@ -27,10 +27,10 @@ namespace GetAPISunset
 
         static async Task Main(string[] args)
         {
-            var wert = new DateOnly(2022, 7, 1);
+            var wert = new DateOnly(2022, 10, 28);
             //DateOnly wert = dateOnly;
             //DateOnly wert = DateOnly.FromDateTime(DateTime.Now);
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 10; i++)
             {
                 var IsDaylightSavingTime = DateTime.Parse(wert.ToString()).IsDaylightSavingTime();
                 wert = wert.AddDays(1);
@@ -70,7 +70,7 @@ namespace GetAPISunset
                 var db = new ApplicationDbContext();
                 var sunUpOrDownTime = new Results[]
                 {
-                        new Results(){sunrise = $"{changedTimeUp}", sunset = $"{changedTimeDown}", DagenDetGaller = wert.ToString()},
+                        new Results(){sunrise = $"{changedTimeUp}", sunset = $"{changedTimeDown}", DagenDetGaller = wert.ToString(), OriginalSunrise = Up.ToString(), OriginalSunset = Down.ToString(), SummerWinter = IsDaylightSavingTime},
                 };
                 db.SunTime.AddRange(sunUpOrDownTime);
                 db.SaveChanges();

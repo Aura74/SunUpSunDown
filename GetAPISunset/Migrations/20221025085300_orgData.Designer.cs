@@ -3,6 +3,7 @@ using GetAPISunset.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GetAPISunset.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221025085300_orgData")]
+    partial class orgData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,9 +40,6 @@ namespace GetAPISunset.Migrations
 
                     b.Property<string>("OriginalSunset")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("SummerWinter")
-                        .HasColumnType("bit");
 
                     b.Property<string>("sunrise")
                         .HasColumnType("nvarchar(max)");
