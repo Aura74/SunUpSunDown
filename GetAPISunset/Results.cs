@@ -9,6 +9,9 @@ namespace GetAPISunset
     public class Results
     {
         public int Id { get; set; }
+        //public DateTime? sunrise { get; set; }
+        //public DateTime? sunset { get; set; }
+
         public string? sunrise { get; set; }
         public string? sunset { get; set; }
 

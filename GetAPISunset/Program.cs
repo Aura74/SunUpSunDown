@@ -27,28 +27,56 @@ namespace GetAPISunset
 
         static async Task Main(string[] args)
         {
-            var dateOnly = new DateOnly(2022, 1, 1);
+            var wert = new DateOnly(2022, 7, 1);
             //DateOnly wert = dateOnly;
-            DateOnly wert = DateOnly.FromDateTime(DateTime.Now);
-            for (int i = 0; i < 5; i++)
+            //DateOnly wert = DateOnly.FromDateTime(DateTime.Now);
+            for (int i = 0; i < 1; i++)
             {
+                var IsDaylightSavingTime = DateTime.Parse(wert.ToString()).IsDaylightSavingTime();
                 wert = wert.AddDays(1);
-                Console.WriteLine();
-                Console.WriteLine(wert);
-                var result = await GetWebApiLongLatAsync(wert.ToString());
-                //var result = await GetWebApiLongLatAsync(dateOnly.ToString());
-
-                Console.WriteLine($"Sunrise: {result.results.sunrise}");
-                Console.WriteLine($"Sunset: {result.results.sunset}");
                 
+                var result = await GetWebApiLongLatAsync(wert.ToString());
+                
+                string dateInputUp = result.results.sunrise;
+                string dateInputDown = result.results.sunset;
+                var Up = DateTime.Parse(dateInputUp);
+                var Down = DateTime.Parse(dateInputDown);
+
+                DateTime changedTimeUp;
+                DateTime changedTimeDown;
+
+                if (IsDaylightSavingTime == false)
+                { 
+                    changedTimeUp = Up.AddHours(1);
+                    changedTimeDown = Down.AddHours(1);
+                }
+                else {
+                    changedTimeUp = Up.AddHours(2);
+                    changedTimeDown = Down.AddHours(2);
+                }
+                
+                Console.WriteLine($"Original från API Sunrise: {Up}");
+                Console.WriteLine($"Original från API Sunset: {Down}\n");
+
+                Console.WriteLine($"Ändrad tid Sunrise: {changedTimeUp}");
+                Console.WriteLine($"Ändrad tid Sunset: {changedTimeDown}");
+
+                //var info = TimeZoneInfo.FindSystemTimeZoneById("Greenwich Standard Time");
+                //DateTimeOffset localServerTime = DateTimeOffset.Now;
+                //bool isDaylightSaving = info.IsDaylightSavingTime(localServerTime);
+                //Console.WriteLine("Day Light Savings :" + isDaylightSaving);
+                //Console.ReadLine();
+
                 var db = new ApplicationDbContext();
                 var sunUpOrDownTime = new Results[]
                 {
-                        new Results(){sunrise = $"{result.results.sunrise}", sunset = $"{result.results.sunset}", DagenDetGaller = wert.ToString()},
+                        new Results(){sunrise = $"{Up}", sunset = $"{Down}", DagenDetGaller = wert.ToString()},
                 };
                 db.SunTime.AddRange(sunUpOrDownTime);
                 db.SaveChanges();
-            }//wert
-        }//Main
+            }//for
+        }
+
+        //Main
     }//Program
 }//namespace
