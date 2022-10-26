@@ -30,7 +30,14 @@ namespace GetAPISunset
             var wert = new DateOnly(2022, 7, 1);
             //DateOnly wert = dateOnly;
             //DateOnly wert = DateOnly.FromDateTime(DateTime.Now);
-            for (int i = 0; i < 1; i++)
+
+            DateTime dayStart = new DateTime(2022, 12, 15); ;
+            DateTime dayEnd = new DateTime(2022, 12, 25);
+            double daysUntil = dayEnd.Subtract(dayStart).TotalDays;
+            Console.WriteLine($"Det är {daysUntil} dagar");
+
+            for (int i = 0; i < daysUntil; i++)
+            //for (int i = 0; i < 1; i++)
             {
                 var IsDaylightSavingTime = DateTime.Parse(wert.ToString()).IsDaylightSavingTime();
                 wert = wert.AddDays(1);
@@ -59,7 +66,7 @@ namespace GetAPISunset
                 Console.WriteLine($"Original från API Sunset: {Down}\n");
 
                 Console.WriteLine($"Ändrad tid Sunrise: {changedTimeUp}");
-                Console.WriteLine($"Ändrad tid Sunset: {changedTimeDown}");
+                Console.WriteLine($"Ändrad tid Sunset: {changedTimeDown}\n");
 
                 //var info = TimeZoneInfo.FindSystemTimeZoneById("Greenwich Standard Time");
                 //DateTimeOffset localServerTime = DateTimeOffset.Now;
