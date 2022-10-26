@@ -36,8 +36,8 @@ namespace GetAPISunset
             double daysUntil = dayEnd.Subtract(dayStart).TotalDays;
             Console.WriteLine($"Det är {daysUntil} dagar");
 
-            for (int i = 0; i < daysUntil; i++)
-            //for (int i = 0; i < 1; i++)
+            //for (int i = 0; i < daysUntil; i++)
+            for (int i = 0; i < 1; i++)
             {
                 var IsDaylightSavingTime = DateTime.Parse(wert.ToString()).IsDaylightSavingTime();
                 wert = wert.AddDays(1);
