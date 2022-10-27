@@ -27,8 +27,8 @@ namespace GetAPISunset
 
         static async Task Main(string[] args)
         {
-           // Skriv i Startdatum
-            var wert = new DateOnly(2022, 7, 15);
+            // Skriv i Startdatum
+            DateOnly wert = new DateOnly(2022, 7, 15);
 
             DateOnly dateOnly = wert;
             DateTime testDateTime = dateOnly.ToDateTime(TimeOnly.Parse("00:00 AM"));
@@ -49,8 +49,8 @@ namespace GetAPISunset
                 
                 string dateInputUp = result.results.sunrise;
                 string dateInputDown = result.results.sunset;
-                var Up = DateTime.Parse(dateInputUp);
-                var Down = DateTime.Parse(dateInputDown);
+                DateTime Up = DateTime.Parse(dateInputUp);
+                DateTime Down = DateTime.Parse(dateInputDown);
 
                 DateTime changedTimeUp;
                 DateTime changedTimeDown;
@@ -70,15 +70,14 @@ namespace GetAPISunset
                 else
                     Console.WriteLine("Det är nu sommartid");
                 
-
                 Console.WriteLine($"Original från API Sunrise: {Up}");
                 Console.WriteLine($"Original från API Sunset: {Down}\n");
 
                 Console.WriteLine($"Ändrad tid Sunrise: {changedTimeUp}");
                 Console.WriteLine($"Ändrad tid Sunset: {changedTimeDown}\n");
 
-                var db = new ApplicationDbContext();
-                var sunUpOrDownTime = new Results[]
+                ApplicationDbContext db = new ApplicationDbContext();
+                Results[] sunUpOrDownTime = new Results[]
                 {
                     new Results(){sunrise = $"{changedTimeUp}", sunset = $"{changedTimeDown}", DagenDetGaller = wert.ToString(), OriginalSunrise = Up.ToString(), OriginalSunset = Down.ToString(), SummerWinter = IsDaylightSavingTime},
                 };
