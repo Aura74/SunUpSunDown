@@ -14,7 +14,8 @@ namespace GetAPISunset
         public string? OriginalSunrise { get; set; }
         public string? OriginalSunset { get; set; }
         public bool SummerWinter { get; set; }
-
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public string DagenDetGaller { get; set; }
     }
 }
