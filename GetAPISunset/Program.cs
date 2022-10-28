@@ -17,11 +17,9 @@ namespace GetAPISunset
         public static async Task<Root> GetWebApiLongLatAsync(string SunDate)
         {
             HttpClient httpClient = new HttpClient();
-
             double latitude = valtLatitude;
             double longitude = valtLongitude;
             string uri = $"https://api.sunrise-sunset.org/json?lat={latitude}&lng={longitude}&date={SunDate}";
-
             HttpResponseMessage response = await httpClient.GetAsync(uri);
             response.EnsureSuccessStatusCode();
             Root wd = await response.Content.ReadFromJsonAsync<Root>();
@@ -30,21 +28,16 @@ namespace GetAPISunset
 
         static async Task Main(string[] args)
         {
-            // Skriv i Startdatum
             DateOnly wert = new DateOnly(2022, 10, 29);
-
             DateOnly dateOnly = wert;
             DateTime testDateTime = dateOnly.ToDateTime(TimeOnly.Parse("00:00 AM"));
-            
             DateTime dayStart = testDateTime;
             DateTime dayEnd = new DateTime(2022, 10, 31);
             double daysUntil = dayEnd.Subtract(dayStart).TotalDays;
             Console.WriteLine($"Från {dayStart.ToString("D")} fram till {dayEnd.ToString("D")} är det {daysUntil + 1} dagar\n");
-
             Console.WriteLine($"valt Latitude: {valtLatitude} och Valt Longitude: {valtLongitude}\n");
 
             for (int i = 0; i < daysUntil+1; i++)
-            //for (int i = 0; i < 1; i++)
             {
                 var IsDaylightSavingTime = DateTime.Parse(wert.ToString()).IsDaylightSavingTime();
                 var ärDetSkottAr = DateTime.IsLeapYear(wert.Year);
@@ -59,7 +52,6 @@ namespace GetAPISunset
                 string dateInputDown = result.results.sunset;
                 DateTime Up = DateTime.Parse(dateInputUp);
                 DateTime Down = DateTime.Parse(dateInputDown);
-
                 DateTime changedTimeUp;
                 DateTime changedTimeDown;
 
