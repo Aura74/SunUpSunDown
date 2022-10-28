@@ -28,24 +28,22 @@ namespace GetAPISunset
         static async Task Main(string[] args)
         {
             // Skriv i Startdatum
-            DateOnly wert = new DateOnly(2022, 7, 15);
+            DateOnly wert = new DateOnly(2022, 10, 29);
 
             DateOnly dateOnly = wert;
             DateTime testDateTime = dateOnly.ToDateTime(TimeOnly.Parse("00:00 AM"));
-            Console.WriteLine(testDateTime);
-
+            
             DateTime dayStart = testDateTime;
-            DateTime dayEnd = new DateTime(2022, 7, 17);
+            DateTime dayEnd = new DateTime(2022, 10, 31);
             double daysUntil = dayEnd.Subtract(dayStart).TotalDays;
-            Console.WriteLine($"Det är {daysUntil} dagar");
+            Console.WriteLine($"Från {dayStart.ToString("D")} fram till {dayEnd.ToString("D")} är det {daysUntil + 1} dagar\n");
 
-            for (int i = 0; i < daysUntil; i++)
+            for (int i = 0; i < daysUntil+1; i++)
             //for (int i = 0; i < 1; i++)
             {
                 var IsDaylightSavingTime = DateTime.Parse(wert.ToString()).IsDaylightSavingTime();
-                wert = wert.AddDays(1);
                 
-                var result = await GetWebApiLongLatAsync(wert.ToString());
+                var result = await GetWebApiLongLatAsync(wert.AddDays(0).ToString());
                 
                 string dateInputUp = result.results.sunrise;
                 string dateInputDown = result.results.sunset;
@@ -66,23 +64,34 @@ namespace GetAPISunset
                 }
 
                 if (IsDaylightSavingTime == false)
-                    Console.WriteLine("Det är nu vintertid");
+                    Console.WriteLine($"Datumet {wert} är det vintertid");
                 else
-                    Console.WriteLine("Det är nu sommartid");
-                
-                Console.WriteLine($"Original från API Sunrise: {Up}");
-                Console.WriteLine($"Original från API Sunset: {Down}\n");
+                    Console.WriteLine($"Datumet {wert} är det sommartid");
 
-                Console.WriteLine($"Ändrad tid Sunrise: {changedTimeUp}");
-                Console.WriteLine($"Ändrad tid Sunset: {changedTimeDown}\n");
+
+                //string Time = dt.ToString("HH:mm:ss:tt"); – 
+
+                //string t1 = dt.ToString("H:mm");
+
+                //dt.ToString("HH:mm"); // 07:00 // 24 hour clock // hour is always 2 digits
+                //dt.ToString("hh:mm tt"); // 07:00 AM // 12 hour clock // hour is always 2 digits
+                //dt.ToString("H:mm"); // 7:00 // 24 hour clock
+                //dt.ToString("h:mm tt"); // 7:00 AM // 12 hour clock
+
+                Console.WriteLine($"Original tid från API:et för soluppgång är {Up.ToString("HH:mm")}");
+                Console.WriteLine($"Original tid från API:et för Solnedgång är {Down.ToString("HH:mm")}\n");
+
+                Console.WriteLine($"Ändrad tid för soluppgång är {changedTimeUp.ToString("HH:mm")}");
+                Console.WriteLine($"Ändrad tid för Solnedgång är {changedTimeDown.ToString("HH:mm")}\n");
 
                 ApplicationDbContext db = new ApplicationDbContext();
                 Results[] sunUpOrDownTime = new Results[]
                 {
-                    new Results(){sunrise = $"{changedTimeUp}", sunset = $"{changedTimeDown}", DagenDetGaller = wert.ToString(), OriginalSunrise = Up.ToString(), OriginalSunset = Down.ToString(), SummerWinter = IsDaylightSavingTime},
+                    new Results(){sunrise = $"{changedTimeUp.ToString("HH:mm")}", sunset = $"{changedTimeDown.ToString("HH:mm")}", DagenDetGaller = wert.ToString(), OriginalSunrise = Up.ToString("HH:mm"), OriginalSunset = Down.ToString("HH:mm"), SummerWinter = IsDaylightSavingTime},
                 };
                 db.SunTime.AddRange(sunUpOrDownTime);
                 db.SaveChanges();
+                wert = wert.AddDays(1);
             }//for
         }//Main
     }//Program
