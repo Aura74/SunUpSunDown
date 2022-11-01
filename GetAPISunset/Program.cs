@@ -28,12 +28,12 @@ namespace GetAPISunset
 
         static async Task Main(string[] args)
         {
-            DateOnly wert = new DateOnly(2022, 10, 29);
-            DateOnly dateOnly = wert;
-            DateTime testDateTime = dateOnly.ToDateTime(TimeOnly.Parse("00:00 AM"));
-            DateTime dayStart = testDateTime;
-            DateTime dayEnd = new DateTime(2022, 10, 31);
-            double daysUntil = dayEnd.Subtract(dayStart).TotalDays;
+            DateOnly wert = new DateOnly(2022, 10, 29);//Datum
+            DateOnly dateOnly = wert;//Datum
+            DateTime testDateTime = dateOnly.ToDateTime(TimeOnly.Parse("00:00 AM"));//Datum
+            DateTime dayStart = testDateTime;//Datum
+            DateTime dayEnd = new DateTime(2022, 10, 31);//Datum
+            double daysUntil = dayEnd.Subtract(dayStart).TotalDays;//doubble
             Console.WriteLine($"Från {dayStart.ToString("D")} fram till {dayEnd.ToString("D")} är det {daysUntil + 1} dagar\n");
             Console.WriteLine($"valt Latitude: {valtLatitude} och Valt Longitude: {valtLongitude}\n");
 
@@ -48,21 +48,21 @@ namespace GetAPISunset
 
                 var result = await GetWebApiLongLatAsync(wert.AddDays(0).ToString());
                 
-                string dateInputUp = result.results.sunrise;
-                string dateInputDown = result.results.sunset;
-                DateTime Up = DateTime.Parse(dateInputUp);
-                DateTime Down = DateTime.Parse(dateInputDown);
-                DateTime changedTimeUp;
-                DateTime changedTimeDown;
+                string dateInputUp = result.results.sunrise;//tid
+                string dateInputDown = result.results.sunset;//tid
+                DateTime Up = DateTime.Parse(dateInputUp);//tid
+                DateTime Down = DateTime.Parse(dateInputDown);//tid
+                DateTime changedTimeUp;//tid
+                DateTime changedTimeDown;//tid
 
                 if (IsDaylightSavingTime == false)
                 { 
-                    changedTimeUp = Up.AddHours(1);
-                    changedTimeDown = Down.AddHours(1);
+                    changedTimeUp = Up.AddHours(1);//tid
+                    changedTimeDown = Down.AddHours(1);//tid
                 }
                 else {
-                    changedTimeUp = Up.AddHours(2);
-                    changedTimeDown = Down.AddHours(2);
+                    changedTimeUp = Up.AddHours(2);//tid
+                    changedTimeDown = Down.AddHours(2);//tid
                 }
 
                 if (IsDaylightSavingTime == false)
