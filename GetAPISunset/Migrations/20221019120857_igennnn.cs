@@ -9,7 +9,7 @@ namespace GetAPISunset.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "DagenDetGaller",
+                name: "Date",
                 table: "SunTime",
                 type: "nvarchar(max)",
                 nullable: false,
@@ -19,7 +19,7 @@ namespace GetAPISunset.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "DagenDetGaller",
+                name: "Date",
                 table: "SunTime");
         }
     }

@@ -79,9 +79,19 @@ namespace GetAPISunset
                 ApplicationDbContext db = new ApplicationDbContext();
                 Results[] sunUpOrDownTime = new Results[]
                 {
-                    new Results(){sunrise = $"{changedTimeUp.ToString("HH:mm")}", sunset = $"{changedTimeDown.ToString("HH:mm")}", DagenDetGaller = wert.ToString(), OriginalSunrise = Up.ToString("HH:mm"), OriginalSunset = Down.ToString("HH:mm"), SummerWinter = IsDaylightSavingTime, Latitude = valtLatitude, Longitude = valtLongitude},
+                    new Results()
+                    {
+                        sunrise = $"{changedTimeUp.ToString("HH:mm")}", 
+                        sunset = $"{changedTimeDown.ToString("HH:mm")}", 
+                        DagenDetGaller = wert.ToString(), 
+                        OriginalSunrise = Up.ToString("HH:mm"), 
+                        OriginalSunset = Down.ToString("HH:mm"), 
+                        SummerWinter = IsDaylightSavingTime, 
+                        Latitude = valtLatitude, 
+                        Longitude = valtLongitude},
                 };
                 db.SunTime.AddRange(sunUpOrDownTime);
+                
                 db.SaveChanges();
                 wert = wert.AddDays(1);
 
