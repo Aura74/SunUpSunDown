@@ -8,6 +8,8 @@ using System.Text.Json.Serialization;
 
 using GetAPISunset.Services;
 using GetAPISunset.Models;
+using System.Security.Cryptography.X509Certificates;
+using Microsoft.EntityFrameworkCore;
 
 namespace GetAPISunset
 {
@@ -32,21 +34,33 @@ namespace GetAPISunset
             DateTime dayStart = testDateTime;//Datum
             DateTime dayEnd = new DateTime(2022, 10, 31);//Datum
 
-            double daysUntil = dayEnd.Subtract(dayStart).TotalDays;
+            double daysUntil = dayEnd.Subtract(dayStart).TotalDays + 1;
 
-            Console.WriteLine($"Från {dayStart.ToString("D")} fram till {dayEnd.ToString("D")} är det {daysUntil+1} dagar\n");
+            Console.WriteLine($"Från {dayStart:D} fram till {dayEnd:D} är det {daysUntil} dagar\n");
             Console.WriteLine($"valt Latitude: {latitude} och Valt Longitude: {longitude}\n");
 
-            for (int i = 0; i < daysUntil+1; i++)
+            for (int i = 0; i < daysUntil; i++)
             {
-                var result = await _client.GetDayAsync(wert.ToString(), latitude, longitude);
-                
-                if (!result.SummerWinter)
-                    Console.WriteLine($"Vid datumet {result.DagenDetGaller} är det vintertid");
-                else
-                    Console.WriteLine($"Vid datumet {result.DagenDetGaller} är det sommartid");
+                // Kolla om datum vid lat/long existerar redan
+                var existingDate = _db.SunTime.Select(d => d)
+                    .Where(d => d.Latitude == latitude
+                    && d.Longitude == longitude
+                    && d.DagenDetGaller == wert.ToString()
+                    ).FirstOrDefault();
 
-                _db.SunTime.Add(result);
+                if (existingDate is not null)
+                {
+                    Console.WriteLine($"Datumet {existingDate.DagenDetGaller} för {existingDate.Latitude}, {existingDate.Longitude} finns redan i databasen.");
+                }
+
+                else
+                {
+                    var result = await _client.GetDayAsync(wert.ToString(), latitude, longitude);
+                    _client.PrintDayDetails(result);
+                    _db.SunTime.Add(result);
+
+                    Console.WriteLine($"Datumet {result.DagenDetGaller} för {result.Latitude}, {result.Longitude} sparades i databasen.");
+                }
 
                 wert = wert.AddDays(1);
             }

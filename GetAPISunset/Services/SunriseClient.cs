@@ -53,5 +53,20 @@ namespace GetAPISunset.Services
 
             return sunUpOrDownTime;
         }
+
+        public void PrintDayDetails(SunriseItem day)
+        {
+            if (!day.SummerWinter)
+                Console.WriteLine($"Vid datumet {day.DagenDetGaller} är det vintertid");
+            else
+                Console.WriteLine($"Vid datumet {day.DagenDetGaller} är det sommartid");
+
+            Console.WriteLine($"Orginalsoluppgång: {day.OriginalSunrise}");
+            Console.WriteLine($"Justerad soluppgång: {day.sunrise}\n");
+
+            Console.WriteLine($"Orginalsolnedgång: {day.OriginalSunset}");
+            Console.WriteLine($"Justerad solnedgång: {day.sunset}\n");
+        }
+
     }
 }
