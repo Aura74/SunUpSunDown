@@ -23,46 +23,34 @@ namespace GetAPISunset
             var _client = new SunriseClient();
             var _db = new ApplicationDbContext();
 
-            //var dateStart = new DateTime(2022, 10, 29);
-            //var dateEnd = new DateTime(2022, 10, 31);
-            //var dayCount = dateEnd.Subtract(dateStart).TotalDays + 1;
+            DateOnly currentDay = new DateOnly(2022, 10, 29);
+            DateTime dateStart = currentDay.ToDateTime(TimeOnly.Parse("00:00 AM"));
+            DateTime dateEnd = new DateTime(2022, 10, 31);
 
-            DateOnly wert = new DateOnly(2022, 10, 29);//Datum
-            DateOnly dateOnly = wert;//Datum
+            double daysUntil = dateEnd.Subtract(dateStart).TotalDays + 1;
 
-            DateTime testDateTime = dateOnly.ToDateTime(TimeOnly.Parse("00:00 AM"));//Datum
-            DateTime dayStart = testDateTime;//Datum
-            DateTime dayEnd = new DateTime(2022, 10, 31);//Datum
-
-            double daysUntil = dayEnd.Subtract(dayStart).TotalDays + 1;
-
-            Console.WriteLine($"Från {dayStart:D} fram till {dayEnd:D} är det {daysUntil} dagar\n");
+            Console.WriteLine($"Från {dateStart:D} fram till {dateEnd:D} är det {daysUntil} dagar\n");
             Console.WriteLine($"valt Latitude: {latitude} och Valt Longitude: {longitude}\n");
 
             for (int i = 0; i < daysUntil; i++)
             {
                 // Kolla om datum vid lat/long existerar redan
-                var existingDate = _db.SunTime.Select(d => d)
-                    .Where(d => d.Latitude == latitude
-                    && d.Longitude == longitude
-                    && d.DagenDetGaller == wert.ToString()
-                    ).FirstOrDefault();
-
-                if (existingDate is not null)
+                if (_client.CheckExistingDate(currentDay.ToString(), latitude, longitude))
                 {
-                    Console.WriteLine($"Datumet {existingDate.DagenDetGaller} för {existingDate.Latitude}, {existingDate.Longitude} finns redan i databasen.");
+                    Console.WriteLine($"Datumet {currentDay} för {latitude}, {longitude} finns redan i databasen.");
                 }
 
                 else
                 {
-                    var result = await _client.GetDayAsync(wert.ToString(), latitude, longitude);
-                    _client.PrintDayDetails(result);
+                    var result = await _client.GetDayAsync(currentDay.ToString(), latitude, longitude);
                     _db.SunTime.Add(result);
+                    Console.WriteLine($"{result.DagenDetGaller} sparas till databas.");
 
-                    Console.WriteLine($"Datumet {result.DagenDetGaller} för {result.Latitude}, {result.Longitude} sparades i databasen.");
+                    // Temporär print för att ge lite detaljer
+                    _client.PrintDayDetails(result);
                 }
 
-                wert = wert.AddDays(1);
+                currentDay = currentDay.AddDays(1);
             }
 
             _db.SaveChanges();

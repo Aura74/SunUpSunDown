@@ -68,5 +68,22 @@ namespace GetAPISunset.Services
             Console.WriteLine($"Justerad solnedgång: {day.sunset}\n");
         }
 
+        public bool CheckExistingDate(string SunDate, double lat, double lon)
+        {
+            var _db = new ApplicationDbContext();
+
+            // Kolla om datum vid lat/long existerar redan
+            var existingDate = _db.SunTime.Select(d => d)
+                .Where(d => d.Latitude == lat
+                && d.Longitude == lon
+                && d.DagenDetGaller == SunDate
+                ).FirstOrDefault();
+
+            if (existingDate is not null)
+                return true;
+            else
+                return false;
+        }
+
     }
 }
