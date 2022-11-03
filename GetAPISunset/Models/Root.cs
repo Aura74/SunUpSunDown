@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GetAPISunset
+namespace GetAPISunset.Models
 {
     public class Root
     {
-        public Results results { get; set; }
+        public SunriseItem results { get; set; }
     }
 }

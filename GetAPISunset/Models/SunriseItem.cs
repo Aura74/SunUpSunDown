@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GetAPISunset
+namespace GetAPISunset.Models
 {
-    public class Results
+    public class SunriseItem
     {
         public int Id { get; set; }
         public string? sunrise { get; set; }//tid
