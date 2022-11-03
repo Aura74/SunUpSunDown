@@ -22,10 +22,20 @@ namespace GetAPISunset
 
             var _client = new SunriseClient();
             var _db = new ApplicationDbContext();
+            int totalDays = 0;
+
+            Console.WriteLine("Hur många dagar ska hämtas?");
+            var tmp = Console.ReadLine();
+            
+            if (int.TryParse(tmp, out totalDays))
+                totalDays -= 1;
 
             DateOnly currentDay = new DateOnly(2022, 10, 29);
-            DateTime dateStart = currentDay.ToDateTime(TimeOnly.Parse("00:00 AM"));
-            DateTime dateEnd = new DateTime(2022, 10, 31);
+            DateTime dateStart = DateTime.Parse(currentDay.ToString());
+            //DateTime dateEnd = new DateTime(2022, 10, 31);
+            DateTime dateEnd = dateStart.AddDays(totalDays);
+
+            Console.WriteLine($"Start: {dateStart.ToShortDateString()}, Slut: {dateEnd.ToShortDateString()}.");
 
             double daysUntil = dateEnd.Subtract(dateStart).TotalDays + 1;
 
