@@ -32,15 +32,10 @@ namespace GetAPISunset
 
             DateOnly currentDay = new DateOnly(2022, 10, 29);
             DateTime dateStart = DateTime.Parse(currentDay.ToString());
-            //DateTime dateEnd = new DateTime(2022, 10, 31);
             DateTime dateEnd = dateStart.AddDays(totalDays);
-
-            Console.WriteLine($"Start: {dateStart.ToShortDateString()}, Slut: {dateEnd.ToShortDateString()}.");
-
             double daysUntil = dateEnd.Subtract(dateStart).TotalDays + 1;
 
             Console.WriteLine($"Från {dateStart:D} fram till {dateEnd:D} är det {daysUntil} dagar\n");
-            Console.WriteLine($"valt Latitude: {latitude} och Valt Longitude: {longitude}\n");
 
             for (int i = 0; i < daysUntil; i++)
             {
@@ -48,7 +43,7 @@ namespace GetAPISunset
                 var existingDate = _db.SunTime.Select(d => d)
                     .Where(d => d.Latitude == latitude
                     && d.Longitude == longitude
-                    && d.DagenDetGaller == currentDay.ToShortDateString()
+                    && d.Datum == currentDay.ToDateTime(TimeOnly.Parse("00:00"))
                     ).FirstOrDefault();
 
                 if (existingDate is not null)
@@ -59,10 +54,7 @@ namespace GetAPISunset
 
                 var result = await _client.GetDayAsync(currentDay.ToString(), latitude, longitude);
                 _db.SunTime.Add(result);
-                Console.WriteLine($"{result.DagenDetGaller} sparas till databas.");
-
-                // Temporär print för att ge lite detaljer
-                _client.PrintDayDetails(result);
+                Console.WriteLine($"{result.Datum} sparas till databas.");
 
                 currentDay = currentDay.AddDays(1);
             }

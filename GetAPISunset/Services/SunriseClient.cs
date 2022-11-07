@@ -21,29 +21,29 @@ namespace GetAPISunset.Services
 
             Root wd = await response.Content.ReadFromJsonAsync<Root>();
 
-            string dateInputUp = wd.results.sunrise;//tid
-            string dateInputDown = wd.results.sunset;//tid
-            DateTime Up = DateTime.Parse(dateInputUp);//tid
-            DateTime Down = DateTime.Parse(dateInputDown);//tid
-            DateTime changedTimeUp;//tid
-            DateTime changedTimeDown;//tid
+            string dateInputUp = wd.results.Sunrise;
+            string dateInputDown = wd.results.Sunset;
+            DateTime Up = DateTime.Parse(dateInputUp);
+            DateTime Down = DateTime.Parse(dateInputDown);
+            DateTime changedTimeUp;
+            DateTime changedTimeDown;
 
-            if (!isDST)
+            if (!isDST) // Summertime
             {
-                changedTimeUp = Up.AddHours(1);//tid
-                changedTimeDown = Down.AddHours(1);//tid
+                changedTimeUp = Up.AddHours(1);
+                changedTimeDown = Down.AddHours(1);
             }
-            else
+            else // Wintertime
             {
-                changedTimeUp = Up.AddHours(2);//tid
-                changedTimeDown = Down.AddHours(2);//tid
+                changedTimeUp = Up.AddHours(2);
+                changedTimeDown = Down.AddHours(2);
             }
 
             var sunUpOrDownTime = new SunriseItem
             {
-                sunrise = $"{changedTimeUp.ToString("HH:mm")}",
-                sunset = $"{changedTimeDown.ToString("HH:mm")}",
-                DagenDetGaller = SunDate,
+                Sunrise = $"{changedTimeUp.ToString("HH:mm")}",
+                Sunset = $"{changedTimeDown.ToString("HH:mm")}",
+                Datum = DateTime.Parse(SunDate),
                 OriginalSunrise = Up.ToString("HH:mm"),
                 OriginalSunset = Down.ToString("HH:mm"),
                 SummerWinter = isDST,
@@ -57,38 +57,38 @@ namespace GetAPISunset.Services
         public void PrintDayDetails(SunriseItem day)
         {
             if (!day.SummerWinter)
-                Console.WriteLine($"Vid datumet {day.DagenDetGaller} är det vintertid");
+                Console.WriteLine($"Vid datumet {day.Datum} är det vintertid");
             else
-                Console.WriteLine($"Vid datumet {day.DagenDetGaller} är det sommartid");
+                Console.WriteLine($"Vid datumet {day.Datum} är det sommartid");
 
             Console.WriteLine($"Orginalsoluppgång: {day.OriginalSunrise}");
-            Console.WriteLine($"Justerad soluppgång: {day.sunrise}\n");
+            Console.WriteLine($"Justerad soluppgång: {day.Sunrise}\n");
 
             Console.WriteLine($"Orginalsolnedgång: {day.OriginalSunset}");
-            Console.WriteLine($"Justerad solnedgång: {day.sunset}\n");
+            Console.WriteLine($"Justerad solnedgång: {day.Sunset}\n");
         }
 
-        public bool CheckExistingDate(string SunDate, double lat, double lon)
-        {
-            var _db = new ApplicationDbContext();
+        //public bool CheckExistingDate(string SunDate, double lat, double lon)
+        //{
+        //    var _db = new ApplicationDbContext();
 
-            // Kolla om datum vid lat/long existerar redan
-            var existingDate = _db.SunTime.Select(d => d)
-                .Where(d => d.Latitude == lat
-                && d.Longitude == lon
-                && d.DagenDetGaller == SunDate
-                ).FirstOrDefault();
+        //    // Kolla om datum vid lat/long existerar redan
+        //    var existingDate = _db.SunTime.Select(d => d)
+        //        .Where(d => d.Latitude == lat
+        //        && d.Longitude == lon
+        //        && d.DagenDetGaller == SunDate
+        //        ).FirstOrDefault();
 
-            if (existingDate is not null)
-            {
-                _db.SunTime.Remove(existingDate);
-                _db.SaveChanges();
-                return false;
-            }
+        //    if (existingDate is not null)
+        //    {
+        //        _db.SunTime.Remove(existingDate);
+        //        _db.SaveChanges();
+        //        return false;
+        //    }
 
 
-            return false;
-        }
+        //    return false;
+        //}
 
     }
 }
