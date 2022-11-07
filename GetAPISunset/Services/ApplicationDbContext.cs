@@ -15,7 +15,7 @@ namespace GetAPISunset.Services
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=Sun555;Integrated Security=true");
+            optionsBuilder.UseSqlServer("Server=.;Database=Sun555;Integrated Security=true");
         }
         public DbSet<SunriseItem> SunTime { get; set; }
     }

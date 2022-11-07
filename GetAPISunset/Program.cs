@@ -45,20 +45,24 @@ namespace GetAPISunset
             for (int i = 0; i < daysUntil; i++)
             {
                 // Kolla om datum vid lat/long existerar redan
-                if (_client.CheckExistingDate(currentDay.ToString(), latitude, longitude))
+                var existingDate = _db.SunTime.Select(d => d)
+                    .Where(d => d.Latitude == latitude
+                    && d.Longitude == longitude
+                    && d.DagenDetGaller == currentDay.ToShortDateString()
+                    ).FirstOrDefault();
+
+                if (existingDate is not null)
                 {
-                    Console.WriteLine($"Datumet {currentDay} för {latitude}, {longitude} finns redan i databasen.");
+                    Console.WriteLine($"Ersätter {currentDay}..");
+                    _db.SunTime.Remove(existingDate);
                 }
 
-                else
-                {
-                    var result = await _client.GetDayAsync(currentDay.ToString(), latitude, longitude);
-                    _db.SunTime.Add(result);
-                    Console.WriteLine($"{result.DagenDetGaller} sparas till databas.");
+                var result = await _client.GetDayAsync(currentDay.ToString(), latitude, longitude);
+                _db.SunTime.Add(result);
+                Console.WriteLine($"{result.DagenDetGaller} sparas till databas.");
 
-                    // Temporär print för att ge lite detaljer
-                    _client.PrintDayDetails(result);
-                }
+                // Temporär print för att ge lite detaljer
+                _client.PrintDayDetails(result);
 
                 currentDay = currentDay.AddDays(1);
             }

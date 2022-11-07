@@ -16,7 +16,7 @@ namespace GetAPISunset.Models
         public bool SummerWinter { get; set; }//bool
         public double Latitude { get; set; }//double
         public double Longitude { get; set; }//double
-        public string DagenDetGaller { get; set; }//Datum
+        public string Day { get; set; }//Datum
 
     }
 }

@@ -80,9 +80,14 @@ namespace GetAPISunset.Services
                 ).FirstOrDefault();
 
             if (existingDate is not null)
-                return true;
-            else
+            {
+                _db.SunTime.Remove(existingDate);
+                _db.SaveChanges();
                 return false;
+            }
+
+
+            return false;
         }
 
     }
